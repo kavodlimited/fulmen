@@ -1,5 +1,11 @@
 // layout.tsx
-export default function Layout({ children }) {
+import { ReactNode } from 'react';
+
+interface LayoutProps {
+  children: ReactNode;
+}
+
+export default function Layout({ children }: LayoutProps) {
   return (
     <div className="min-h-screen bg-blueberry text-white">
       {/* Header */}
@@ -21,5 +27,5 @@ export default function Layout({ children }) {
         </div>
       </footer>
     </div>
-  )
+  );
 }
