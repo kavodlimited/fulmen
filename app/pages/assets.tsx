@@ -1,4 +1,3 @@
-// pages/assets.tsx
 import { useEffect, useState } from 'react'
 import { supabase } from '../utils/supabase'
 import { useRouter } from 'next/router'
@@ -8,15 +7,20 @@ export default function Assets() {
   const router = useRouter()
 
   useEffect(() => {
-    const currentSession = supabase.auth.session()
-    setSession(currentSession)
+    const getSession = async () => {
+      const { data: { session } } = await supabase.auth.getSession()
+      setSession(session)
 
-    if (!currentSession) {
-      router.push('/login') // Redirect to login if no session
+      if (!session) {
+        router.push('/login') // Redirect to login if no session
+      }
     }
-  }, [])
 
-  if (!session) return null // Don't render page until session is verified
+    getSession()
+
+  }, [router]) // Add router as a dependency to avoid the missing dependency warning
+
+  if (!session) return null // Avoid rendering page until session is verified
 
   return (
     <div>
