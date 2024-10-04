@@ -1,16 +1,20 @@
-// pages/index.tsx
 import { useEffect, useState } from 'react'
 import { supabase } from '../utils/supabase'
 import Layout from '../components/layout'
+import { Session } from '@supabase/supabase-js' // Import the Session type
 
 export default function Home() {
-  const [user, setUser] = useState(null)
+  const [user, setUser] = useState<Session | null>(null)
 
   useEffect(() => {
-    const session = supabase.auth.session()
-    if (session) {
-      setUser(session.user)
+    const getSession = async () => {
+      const { data: { session } } = await supabase.auth.getSession()
+      if (session) {
+        setUser(session.user) // Set the user if session exists
+      }
     }
+
+    getSession()
   }, [])
 
   return (
