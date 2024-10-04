@@ -1,10 +1,10 @@
 import { useEffect, useState } from 'react'
 import { supabase } from '../utils/supabase'
 import Layout from '../components/layout'
-import { Session } from '@supabase/supabase-js' // Import the Session type
+import { User } from '@supabase/supabase-js' // Import the User type
 
 export default function Home() {
-  const [user, setUser] = useState<Session | null>(null)
+  const [user, setUser] = useState<User | null>(null) // Track the user, not the session
 
   useEffect(() => {
     const getSession = async () => {
