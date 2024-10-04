@@ -1,32 +1,57 @@
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import { supabase } from '../utils/supabase'
-import Layout from '../components/layout'
-import { User } from '@supabase/supabase-js' // Import the User type
+import { useRouter } from 'next/router'
 
-export default function Home() {
-  const [user, setUser] = useState<User | null>(null) // Track the user, not the session
+export default function Login() {
+  const [email, setEmail] = useState('')
+  const [password, setPassword] = useState('')
+  const router = useRouter()
 
-  useEffect(() => {
-    const getSession = async () => {
-      const { data: { session } } = await supabase.auth.getSession()
-      if (session) {
-        setUser(session.user) // Set the user if session exists
-      }
+  // Type the 'e' parameter as React.FormEvent
+  const handleLogin = async (e: React.FormEvent) => {
+    e.preventDefault()
+
+    const { error } = await supabase.auth.signInWithPassword({
+      email,
+      password,
+    })
+
+    if (error) {
+      console.error(error.message)
+    } else {
+      // Redirect to the assets page on successful login
+      router.push('/assets')
     }
-
-    getSession()
-  }, [])
+  }
 
   return (
-    <Layout>
-      <div className="text-center">
-        <h1 className="text-4xl font-bold mb-4">Welcome to Fulmen</h1>
-        {user ? (
-          <p className="text-lg">Hello, {user.email}</p>
-        ) : (
-          <p className="text-lg">Please log in to manage your assets.</p>
-        )}
-      </div>
-    </Layout>
+    <div className="max-w-md mx-auto mt-8">
+      <h1 className="text-2xl font-bold">Login</h1>
+      <form onSubmit={handleLogin} className="space-y-4">
+        <div>
+          <label className="block text-sm font-medium">Email</label>
+          <input
+            type="email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            className="border p-2 w-full"
+            required
+          />
+        </div>
+        <div>
+          <label className="block text-sm font-medium">Password</label>
+          <input
+            type="password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            className="border p-2 w-full"
+            required
+          />
+        </div>
+        <button type="submit" className="bg-blue-500 text-white p-2 w-full">
+          Login
+        </button>
+      </form>
+    </div>
   )
 }
