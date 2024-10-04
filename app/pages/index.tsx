@@ -26,7 +26,7 @@ export default function Login() {
 
   return (
     <div className="max-w-md mx-auto mt-8">
-      <h1 className="text-2xl font-bold">Login</h1>
+      <h1 className="text-2xl font-bold">Start</h1>
       <form onSubmit={handleLogin} className="space-y-4">
         <div>
           <label className="block text-sm font-medium">Email</label>
